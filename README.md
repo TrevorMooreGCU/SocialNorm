@@ -1,4 +1,5 @@
 # SocialNorm
+A new social media web app where users can embrace anonymity with the masses and privacy with friends.
 
 # Inspiration
 I wanted a social media web app that was responsive enough so that I could use it on my desktop and phone,
