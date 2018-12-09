@@ -1,9 +1,16 @@
 package com.socialnorm.services.data;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import org.apache.tomcat.jdbc.pool.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
+import com.socialnorm.model.ChatModel;
+import com.socialnorm.model.CommentModel;
 import com.socialnorm.model.CredentialModel;
+import com.socialnorm.model.MessageModel;
+import com.socialnorm.model.RegisterModel;
+import com.socialnorm.model.TopicModel;
 
 /**
  * Trevor Moore
@@ -12,60 +19,45 @@ import com.socialnorm.model.CredentialModel;
  * This assignment was completed in collaboration with Aaron Ross
  * This is our own work.
  * 
- * SecurityDAO concrete implementation class of ISecurityDAO
+ * SecurityDAO extending DataAccessInterface abstract class and therefore inheriting all its methods. For talking with the database concerning logging in
  * @author Trevor
  *
  */
-public class SecurityDAO implements ISecurityDAO
+public class SecurityDAO extends DataAccessInterface<RegisterModel,CredentialModel,TopicModel,CommentModel,ChatModel,MessageModel>
 {
-	// IDBConnection for injecting our database connection class
-	IDBConnection dbconn;
-
+	// Injecting DataSource and JdbcTemplate
+	DataSource dataSource;
+	JdbcTemplate jdbcTemplate;
 	/**
-	 * Autowired method for setting the injected DBConnection
-	 * @param dbconn type IDBConnection
+	 * Autowired method for setting the DataSource and JdbcTemplate in order to connect to the db
+	 * @param dataSource type DataSource
 	 */
 	@Autowired
-	public void setDBConnection(IDBConnection dbconn)
+	public void setDataSource(DataSource dataSource) 
 	{
-		this.dbconn = dbconn;
+		this.dataSource = dataSource;
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	
 	/**
 	 * Overridden method for checking if a user is in the users table
 	 * 
 	 * @param user type CredentialModel
-	 * @return boolean object type
+	 * @return String
 	 */
 	@Override
-	public boolean checkUser(CredentialModel user) 
+	public String checkUser(CredentialModel user) 
 	{
-		// try catch for catching exceptions
-		try 
-		{
-			// n1euzrfjibaye0bl
-			// defining query for checking if there is a row that matches the username and password passed in
-			String query = "SELECT * FROM SOCIALNORM.USERS WHERE USERNAME = ? AND PASSWORD = ?";
-			
-			// prepared statement for the query, using injected dbconnection to connect to db
-			PreparedStatement pt = dbconn.dbConnect().prepareStatement(query);
-			
-			// setting the parameters for the prepared statement
-			pt.setString(1, user.getUsername());
-			pt.setString(2, user.getPassword());
+		// n1euzrfjibaye0bl
+		// grabbing everything where the credentials match
+		String query = "SELECT * FROM n1euzrfjibaye0bl.users WHERE BINARY USERNAME = ? AND BINARY PASSWORD = ?";
+		
+		// execute the query
+		SqlRowSet srs = jdbcTemplate.queryForRowSet(query, user.getUsername(), user.getPassword());
 
-            // executing it and grabbing and returning the resultset (will be true for duplicate record, false for no duplicate)
-            pt.execute();
-            ResultSet rs = pt.getResultSet();
-            return rs.next();
-            
-		}
-		//catching exceptions and printing failure
-		catch(Exception e) 
-		{
-			e.printStackTrace();
-			System.out.println("Database Exception. Caught in SecurityDAO.");
-			return false;
-		}
+		// if theres a row returned, return the id else return fail
+        if(srs.next())
+        	return srs.getString("ID");
+        else
+        	return "fail";
 	}
 }

@@ -10,16 +10,22 @@ We used source code from the following websites to complete this assignment:
 https://www.w3schools.com/bootstrap/bootstrap_navbar.asp
 https://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form
 https://www.w3schools.com/bootstrap/bootstrap_ref_comp_glyphs.asp
+https://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form
+https://bootsnipp.com/snippets/OORq
+http://www.jqueryscript.net/layout/Simple-jQuery-Plugin-To-Create-Pinterest-Style-Grid-Layout-Pinterest-Grid.html
+https://bootsnipp.com/snippets/featured/message-chat-box
+https://bootsnipp.com/snippets/featured/simple-comment-block
 
-For boostrapping the navbar
+For boostrapping the navbar with cool css, the pinterest grid, comment UI, and chats UI
 -->
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="<c:url value="/resources/Site.css" />" rel="stylesheet" type="text/css" />
+<link href="<c:url value="/resources/bootstrap.min.css" />" rel="stylesheet" type="text/css" id="bootstrap-css"/>
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
 <body>
-	<nav class="navbar navbar-default navbar-inverse" role="navigation" style="padding: 0px; left: 0; top: 0; width: 100%; position:absolute; border-radius: 0;">
+	<nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation" style="background-image:none; background-color:rgba(0, 0, 0, 0.7); padding: 0px; left: 0; top: 0; width: 100%; position:fixed !important; border-radius: 0;">
 		<div class="container-fluid">
 		
 		
@@ -34,7 +40,7 @@ For boostrapping the navbar
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<img src="<c:url value="/resources/images/socialnormlogo.png" />" width="120" height="40" align="left" style="margin-top: 3px; padding-left: 5px" class="logo" />
+				<a href="<c:url value="/Home" />"><img src="<c:url value="/resources/images/socialnormlogo.png" />" width="120" height="40" align="left" style="margin-top: 3px; padding-left: 5px" class="logo" /></a>
 			</div>
 			<!-- end responsive hamburger -->
 			
@@ -45,9 +51,32 @@ For boostrapping the navbar
 			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="nav navbar-nav">
 
-					<li><a href="<c:url value="/Home" />">Home</a></li>
+<%
+if(session.getAttribute("user") != null) {
+%>
+    	
+    	<li><a href="<c:url value="/Home" />">Home</a></li>
 					
-					<li><a href="<c:url value="/create/socialize" />">Socialize</a></li>
+					<li><a href="<c:url value="/create/socialize" />">Share</a></li>
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Socialize <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="<c:url value="/view/category?id=Education" />">Education</a></li>
+							<li><a href="<c:url value="/view/category?id=Stock Market" />">Stock Market</a></li>
+							<li><a href="<c:url value="/view/category?id=Entertainment" />">Entertainment</a></li>
+							<li><a href="<c:url value="/view/category?id=Social Media" />">Social Media</a></li>
+							<li><a href="<c:url value="/view/category?id=Politics" />">Politics</a></li>
+						</ul>
+					</li>
+    	
+<% 
+}
+else {
+%>
+
+<!-- Link to the home page -->
+					<li><a href="<c:url value="/" />">Home</a></li>
 
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">What's New? <span class="caret"></span></a>
@@ -60,20 +89,23 @@ For boostrapping the navbar
 						</ul>
 					</li>
 					<!-- dropdown option end -->
+<%
+}
+%>
+					
 				</ul>
 				
 				
 
-				<!--Search form start -->
-				<!-- method="POST" action="search" -->
-				<form:form method="POST" action="${pageContext.request.contextPath}/search/securesearch" modelAttribute="search" class="navbar-form navbar-left" role="search">
+				<!--Search form start ${pageContext.request.contextPath}/search/usersearch -->
+				<form method="POST" action="${pageContext.request.contextPath}/search/go" class="navbar-form navbar-left" role="search">
 				    <div class="form-group">
-				        <form:input type="text" class="form-control" placeholder="Search" path="search"></form:input>
+				        <input type="text" class="form-control" placeholder="Search" name="search" maxlength="25"></input>
 				    </div>
-				    <input type="submit" value="Search" class="btn btn-default" />
-				</form:form>
+				    <input type="submit" class="btn btn-default" value="Search" />
+				</form>
 				<!--Search form end -->
-
+				
 				
 
 
@@ -81,9 +113,33 @@ For boostrapping the navbar
 
 				<!--the right side of the navbar -->
 				<ul class="nav navbar-nav navbar-right">
+<%
+if(session.getAttribute("user") != null) {
+%>
+
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Profile <span class="caret"></span></a>
+						<ul class="dropdown-menu" role="menu">
+							<li><a href="<c:url value="/view/mymessages" />">Messages</a></li>
+							<li><a href="<c:url value="/view/mytopics" />">Account</a></li>
+						</ul>
+					</li>
 					<!-- Register link start -->
 					<li><a href="<c:url value="/" />"><b>Logout</b> <span class="glyphicon glyphicon-log-out"></span></a></li>
+<% 
+}
+else {
+%>
+					<!-- Register link start -->
+					<li><a href="<c:url value="/register/" />"><b>Register</b> <span class="glyphicon glyphicon-user"></span></a></li>
 					<!-- register link end -->
+					
+					<!--Login form start-->
+					<li><a href="<c:url value="/login/" />"><b>Login</b> <span class="glyphicon glyphicon-log-in"></span></a></li>
+<%
+}
+%>
+					
 				</ul>
 				
 				
@@ -105,5 +161,4 @@ For boostrapping the navbar
 
 <br/>
 <br/>
-<br/>
-<br/>
+

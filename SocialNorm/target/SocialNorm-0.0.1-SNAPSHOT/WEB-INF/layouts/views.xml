@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN" "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+
+<!-- 
+Trevor Moore
+CST-341
+9/22/2018
+This assignment was completed in collaboration with Trevor Moore and Aaron Ross
+-->
+
+<tiles-definitions>
+	<!-- NOTE! WE MUST ADD ALL BODY VIEWS TO THE PAGE (EVERY SINGLE JSP FILE) -->
+	
+	<!-- THESE ARE ALL LOGGED OUT VIEWS -->
+	<definition name="registerUser" extends="DefaultTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/registerUser.jsp" />
+	</definition>
+	<definition name="loginUser" extends="DefaultTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/loginUser.jsp" />
+	</definition>
+	<definition name="searchError" extends="DefaultTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/searchError.jsp" />
+	</definition>
+	<definition name="registerSuccess" extends="DefaultTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/registerSuccess.jsp" />
+	</definition>
+	<definition name="home" extends="DefaultTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/home.jsp" />
+	</definition>
+	
+	
+	<!-- Global exceptions view -->
+	<definition name="error" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/error.jsp" />
+	</definition>
+	
+	
+	<!-- THESE ARE ALL LOGGED IN/SECURE VIEWS -->
+	<definition name="welcomeHome" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/welcomeHome.jsp" />
+	</definition>
+	<definition name="secureHome" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/secureHome.jsp" />
+	</definition>
+	<definition name="secureSearchError" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/secureSearchError.jsp" />
+	</definition>
+	<definition name="createTopic" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/createTopic.jsp" />
+	</definition>
+	<definition name="topicCreationSuccess" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/topicCreationSuccess.jsp" />
+	</definition>
+	<definition name="secureError" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/secureError.jsp" />
+	</definition>
+	<definition name="customException" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/customException.jsp" />
+	</definition>
+	<definition name="viewAllTopics" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/viewAllTopics.jsp" />
+	</definition>
+	<definition name="viewTopic" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/viewTopic.jsp" />
+	</definition>
+	<definition name="updateTopic" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/updateTopic.jsp" />
+	</definition>
+	<definition name="deleteTopic" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/deleteTopic.jsp" />
+	</definition>
+	<definition name="categoryView" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/categoryView.jsp" />
+	</definition>
+	<definition name="userTopics" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/userTopics.jsp" />
+	</definition>
+	
+</tiles-definitions>
+
+
+

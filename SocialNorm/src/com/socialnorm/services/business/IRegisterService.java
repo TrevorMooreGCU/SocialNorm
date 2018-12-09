@@ -21,5 +21,5 @@ public interface IRegisterService
 	 * @param user of type RegisterModel
 	 * @return String object type
 	 */
-	public String register(RegisterModel user);
+	public int register(RegisterModel user);
 }

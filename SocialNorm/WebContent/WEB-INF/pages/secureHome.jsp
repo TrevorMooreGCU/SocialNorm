@@ -1,14 +1,20 @@
 <!-- 
 Trevor Moore
 CST-341
-9/22/2018
+12/06/2018
 This assignment was completed in collaboration with Trevor Moore and Aaron Ross
 
 We used source code from the following websites to complete this assignment:
-https://bootstrapbay.com/blog/bootstrap-3-carousel-tutorial/ 
-http://javawebtutor.com/articles/spring/configuring-static-resources-in-spring-mvc.php
+https://www.w3schools.com/bootstrap/bootstrap_navbar.asp
+https://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form
+https://www.w3schools.com/bootstrap/bootstrap_ref_comp_glyphs.asp
+https://bootsnipp.com/snippets/featured/fancy-navbar-login-sign-in-form
+https://bootsnipp.com/snippets/OORq
+http://www.jqueryscript.net/layout/Simple-jQuery-Plugin-To-Create-Pinterest-Style-Grid-Layout-Pinterest-Grid.html
+https://bootsnipp.com/snippets/featured/message-chat-box
+https://bootsnipp.com/snippets/featured/simple-comment-block
 
-For making the carousel
+For boostrapping the navbar with cool css, the pinterest grid, comment UI, and chats UI
 -->
   
 <style>
@@ -21,13 +27,7 @@ For making the carousel
 
 </style>
 
-<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
-<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-
-
-
-<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="3000">
+<div id="carousel-example-generic" class="carousel slide" data-ride="carousel" data-interval="6000">
   <!-- Indicators -->
   <ol class="carousel-indicators">
     <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>

@@ -1,9 +1,15 @@
 package com.socialnorm.services.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import com.socialnorm.model.CredentialModel;
-import com.socialnorm.services.data.ISecurityDAO;
+import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.socialnorm.model.ChatModel;
+import com.socialnorm.model.CommentModel;
+import com.socialnorm.model.CredentialModel;
+import com.socialnorm.model.MessageModel;
+import com.socialnorm.model.RegisterModel;
+import com.socialnorm.model.TopicModel;
+import com.socialnorm.services.data.DataAccessInterface;
 /**
  * Trevor Moore
  * CST-341
@@ -17,19 +23,18 @@ import com.socialnorm.services.data.ISecurityDAO;
  */
 public class LoginService implements ILoginService
 {
-	// ISecurityDAO for injecting our SecurityDAO
-	ISecurityDAO securityDAO;
-
+	// DataAccessInterface for injecting our SecurityDAO
+	DataAccessInterface<RegisterModel,CredentialModel,TopicModel,CommentModel,ChatModel,MessageModel> securityDAO;
 	/**
 	 * Autowired method for setting the injected Security DAO
 	 * @param dao type ISecurityDAO
 	 */
 	@Autowired
-	public void setSecurityDAO(ISecurityDAO dao)
+	@Qualifier("security")
+	public void setSecurityDAO(DataAccessInterface<RegisterModel,CredentialModel,TopicModel,CommentModel,ChatModel,MessageModel> dao)
 	{
 		this.securityDAO = dao;
 	}
-	
 	/**
 	 * Overridden method for checking if a user's credentials are in the database
 	 * 
@@ -37,20 +42,9 @@ public class LoginService implements ILoginService
 	 * @return boolean object type
 	 */
 	@Override
-	public boolean loginCheck(CredentialModel user) 
+	public String loginCheck(CredentialModel user) 
 	{
-		// try catch for catching database exceptions
-		try
-		{
-			// return the result of the check user method called on the security dao
-			return securityDAO.checkUser(user);
-		}
-		// catch exceptions
-		catch(Exception e)
-		{
-			System.out.println("Database Exception. Caught in Login Business Service.");
-			return false;
-		}
+		// return the result of the check user method called on the security dao
+		return securityDAO.checkUser(user);
 	}
-	
 }

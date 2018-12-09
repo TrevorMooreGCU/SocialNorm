@@ -40,6 +40,11 @@ public class RegisterModel extends CredentialModel
 	@NotNull(message="Phone cannot be left blank.")
 	@Digits(integer=10, fraction=0, message="Must be a real phone number.")
 	private String phone;
+	
+	@Size(max=500, message="Cannot exceed 500 characters.")
+	private String bio;
+	
+	private String id;
 
 	/**
 	 * Default constructor
@@ -52,6 +57,8 @@ public class RegisterModel extends CredentialModel
 		this.phone = "";
 		this.username = "";
 		this.password = "";
+		this.bio = "";
+		this.id = "";
 	}
 	
 	/**
@@ -103,5 +110,16 @@ public class RegisterModel extends CredentialModel
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-	
+	public String getBio() {
+		return bio;
+	}
+	public void setBio(String bio) {
+		this.bio = bio;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 }

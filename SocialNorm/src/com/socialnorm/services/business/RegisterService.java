@@ -1,9 +1,15 @@
 package com.socialnorm.services.business;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import com.socialnorm.model.RegisterModel;
-import com.socialnorm.services.data.IRegistrationDAO;
+import org.springframework.beans.factory.annotation.Qualifier;
 
+import com.socialnorm.model.ChatModel;
+import com.socialnorm.model.CommentModel;
+import com.socialnorm.model.CredentialModel;
+import com.socialnorm.model.MessageModel;
+import com.socialnorm.model.RegisterModel;
+import com.socialnorm.model.TopicModel;
+import com.socialnorm.services.data.DataAccessInterface;
 /**
  * Trevor Moore
  * CST-341
@@ -17,19 +23,18 @@ import com.socialnorm.services.data.IRegistrationDAO;
  */
 public class RegisterService implements IRegisterService
 {
-	// IRegistrationDAO for injecting our RegistrationDAO
-	IRegistrationDAO registrationDAO;
-
+	// DataAccessInterface for injecting our RegistrationDAO
+	DataAccessInterface<RegisterModel,CredentialModel,TopicModel,CommentModel,ChatModel,MessageModel> registrationDAO;
 	/**
 	 * Autowired method for setting the injected Registration DAO
 	 * @param dao type IRegistrationDAO
 	 */
 	@Autowired
-	public void setRegistrationDAO(IRegistrationDAO dao)
+	@Qualifier("register")
+	public void setRegistrationDAO(DataAccessInterface<RegisterModel,CredentialModel,TopicModel,CommentModel,ChatModel,MessageModel> dao)
 	{
 		this.registrationDAO = dao;
 	}
-	
 	/**
 	 * Overridden method for inserting a user's credentials into the database
 	 * 
@@ -37,19 +42,22 @@ public class RegisterService implements IRegisterService
 	 * @return String object type
 	 */
 	@Override
-	public String register(RegisterModel user) 
+	public int register(RegisterModel user) 
 	{
-		// try catch for catching database exceptions
-		try
+		// if attempt to register results in 1 (success), insert the user into the info table
+		if(registrationDAO.registerUser(user) == 1)
 		{
-			// returning the result of the registerUser called on the registration dao
-			return registrationDAO.registerUser(user);
+			// if attempt to insert user into info table results in 1 (success), return 1 (success
+			if(registrationDAO.addUserInfo(user) == 1)
+			{
+				return 1;
+			}
+			// else return -1 (failure)
+			else
+				return -1;
 		}
-		// catch exceptions
-		catch(Exception e)
-		{
-			System.out.println("Database Exception. Caught in Register Business Service.");
-			return "failure";
-		}
+		// else return 0 (duplicate username)
+		else
+			return 0;
 	}
 }

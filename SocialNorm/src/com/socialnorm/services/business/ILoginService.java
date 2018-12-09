@@ -21,5 +21,5 @@ public interface ILoginService
 	 * @param user of type CredentialModel
 	 * @return boolean object type
 	 */
-	public boolean loginCheck(CredentialModel user);
+	public String loginCheck(CredentialModel user);
 }

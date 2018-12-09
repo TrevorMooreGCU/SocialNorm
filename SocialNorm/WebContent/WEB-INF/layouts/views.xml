@@ -27,29 +27,65 @@ This assignment was completed in collaboration with Trevor Moore and Aaron Ross
 	<definition name="home" extends="DefaultTemplate">
     	<put-attribute name="body" value="/WEB-INF/pages/home.jsp" />
 	</definition>
-	<definition name="error" extends="DefaultTemplate">
+	
+	
+	<!-- Global exceptions view -->
+	<definition name="error" extends="SecureTemplate">
     	<put-attribute name="body" value="/WEB-INF/pages/error.jsp" />
 	</definition>
 	
 	
 	<!-- THESE ARE ALL LOGGED IN/SECURE VIEWS -->
-	<definition name="welcomeHome" extends="LoggedInTemplate">
+	<definition name="welcomeHome" extends="SecureTemplate">
     	<put-attribute name="body" value="/WEB-INF/pages/welcomeHome.jsp" />
 	</definition>
-	<definition name="secureHome" extends="LoggedInTemplate">
+	<definition name="secureHome" extends="SecureTemplate">
     	<put-attribute name="body" value="/WEB-INF/pages/secureHome.jsp" />
 	</definition>
-	<definition name="secureSearchError" extends="LoggedInTemplate">
+	<definition name="secureSearchError" extends="SecureTemplate">
     	<put-attribute name="body" value="/WEB-INF/pages/secureSearchError.jsp" />
 	</definition>
-	<definition name="createTopic" extends="LoggedInTemplate">
+	<definition name="createTopic" extends="SecureTemplate">
     	<put-attribute name="body" value="/WEB-INF/pages/createTopic.jsp" />
 	</definition>
-	<definition name="topicCreationSuccess" extends="LoggedInTemplate">
+	<definition name="topicCreationSuccess" extends="SecureTemplate">
     	<put-attribute name="body" value="/WEB-INF/pages/topicCreationSuccess.jsp" />
 	</definition>
-	<definition name="secureError" extends="LoggedInTemplate">
+	<definition name="secureError" extends="SecureTemplate">
     	<put-attribute name="body" value="/WEB-INF/pages/secureError.jsp" />
+	</definition>
+	<definition name="customException" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/customException.jsp" />
+	</definition>
+	<definition name="viewAllTopics" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/viewAllTopics.jsp" />
+	</definition>
+	<definition name="viewTopic" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/viewTopic.jsp" />
+	</definition>
+	<definition name="updateTopic" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/updateTopic.jsp" />
+	</definition>
+	<definition name="deleteTopic" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/deleteTopic.jsp" />
+	</definition>
+	<definition name="categoryView" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/categoryView.jsp" />
+	</definition>
+	<definition name="userTopics" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/userTopics.jsp" />
+	</definition>
+	<definition name="updateAccount" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/updateAccount.jsp" />
+	</definition>
+	<definition name="viewAccount" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/viewAccount.jsp" />
+	</definition>
+	<definition name="message" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/message.jsp" />
+	</definition>
+	<definition name="searchResults" extends="SecureTemplate">
+    	<put-attribute name="body" value="/WEB-INF/pages/searchResults.jsp" />
 	</definition>
 	
 </tiles-definitions>

@@ -22,7 +22,7 @@ import javax.validation.constraints.Size;
 public class TopicModel
 {
 	@NotNull(message="Date cannot be left blank.")
-	@Size(min=23, max=25, message="Must be in DATETIME format: YYYY-MM-DD HH:MI:SS")
+	@Size(min=19, max=21, message="Must be in DATETIME format: YYYY-MM-DD HH:MI:SS")
 	private String date;
 
 	@NotNull(message="Title cannot be left blank.")
@@ -37,6 +37,10 @@ public class TopicModel
 	@Size(min=1, max=300, message="Cannot be empty and cannot exceed 300 characters.")
 	private String body;
 	
+	private String id;
+	
+	private String userid;
+
 	/**
 	 * Default constructor
 	 */
@@ -46,6 +50,8 @@ public class TopicModel
 		this.title = "";
 		this.category = "";
 		this.body = "";
+		this.id = "";
+		this.userid = "";
 	}
 	
 	/**
@@ -54,14 +60,18 @@ public class TopicModel
 	 * @param title type String
 	 * @param category type String
 	 * @param body type String
+	 * @param id type String
+	 * @param userid type String
 	 */
-	public TopicModel(String date, String title, String category, String body) 
+	public TopicModel(String date, String title, String category, String body, String id, String userid) 
 	{
 		super();
 		this.date = date;
 		this.title = title;
 		this.category = category;
 		this.body = body;
+		this.id = id;
+		this.userid = userid;
 	}
 
 	// GETTERS AND SETTERS
@@ -88,5 +98,17 @@ public class TopicModel
 	}
 	public void setBody(String body) {
 		this.body = body;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
+	public String getUserid() {
+		return userid;
+	}
+	public void setUserid(String userid) {
+		this.userid = userid;
 	}
 }

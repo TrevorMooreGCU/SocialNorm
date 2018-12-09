@@ -29,7 +29,7 @@ public class CredentialModel
 	
 	@NotNull(message="Password cannot be left blank.")
 	@Size(min=8, max=25, message="Must be between 8 and 25 characters.")
-	@Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!&]).{8,25})", message="Must contain at least 8 characters, 1 letter, 1 number and 1 special character.")
+	@Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%!&]).{8,25})", message="Must contain at least 8 characters, 1 uppercase and lowercase letter, 1 number and 1 special character.")
 	protected String password;
 
 	/**
@@ -66,5 +66,4 @@ public class CredentialModel
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 }

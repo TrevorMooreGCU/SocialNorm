@@ -1,14 +1,15 @@
 package com.socialnorm.controller;
 
-import javax.validation.Valid;
+import java.util.ArrayList;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import com.socialnorm.model.CredentialModel;
 import com.socialnorm.model.SearchModel;
+import com.socialnorm.model.TopicModel;
+import com.socialnorm.services.business.ITopicService;
 
 /**
  * Trevor Moore
@@ -17,7 +18,7 @@ import com.socialnorm.model.SearchModel;
  * This assignment was completed in collaboration with Aaron Ross
  * This is our own work.
  * 
- * SearchController Class for searching content on SocialNorm.
+ * SearchController Class for searching content on SocialNorm. Invoke using "/search"
  * @author Trevor
  * 
  */
@@ -25,77 +26,46 @@ import com.socialnorm.model.SearchModel;
 @RequestMapping("/search")
 public class SearchController 
 {
+	// Topic Service that is being injected and used to insert new topics into the database
+	ITopicService topicService;
 	/**
-	 * This method at "/search/usersearch" will allow users to search the site when they are NOT logged in.
-	 * 
-	 * @param search Model of a user of type Search.
-	 * @param result of type BindingResult.
-	 * @return ModelAndView to display errors on error page or return the home page if no errors occur.
+	 * Autowired method for setting the injected Topic Service
+	 * @param service type ITopicPostService
 	 */
-	@RequestMapping(path="/usersearch", method=RequestMethod.POST)
-	public ModelAndView search(@Valid @ModelAttribute("search") SearchModel search, BindingResult result)
+	@Autowired
+	public void setTopicService(ITopicService service)
 	{
-		// check if the model has data validation errors
-		if(result.hasErrors())
-		{
-			// if it has errors:
-			// instantiating ModelAndView object and specifying to return the "searchError" view
-			ModelAndView mav = new ModelAndView("searchError");
-			
-			// adding a Login, Register, and Search model (using model passed in) objects to the ModelAndView to resolve the form modelAttributes in the header (search form and login form both need models)
-			mav.addObject("login", new CredentialModel());
-			mav.addObject("search", search);
-
-			// returning ModelAndView object with all models needed attached
-			return mav;
-		}
-		
-		// if it does not have errors:
-		// instantiating ModelAndView object and specifying to return the "home" view
-		ModelAndView mav = new ModelAndView("home");
-		
-		// adding a Login, Register, and Search model (using model passed in) objects to the ModelAndView to resolve the form modelAttributes in the header (search form and login form both need models)
-		mav.addObject("login", new CredentialModel());
-		mav.addObject("search", search);
-		
-		// returning ModelAndView object with all models needed attached
-		return mav;
-		
+		this.topicService = service;
 	}
-	
 	/**
-	 * This method at "/search/securesearch" will allow users to search the site when they ARE logged in.
+	 * Method used for searching for topics and returning the search results view.
+	 * Only available for logged in users.
+	 * Invoke using "/search/go" URI.
 	 * 
-	 * @param search Model of a user of type Search.
-	 * @param result of type BindingResult.
-	 * @return ModelAndView to display errors on secure error page or return the secure home page if no errors occur.
+	 * @param search type string
+	 * @return ModelAndView searchResults.jsp
 	 */
-	@RequestMapping(path="/securesearch", method=RequestMethod.POST)
-	public ModelAndView secureSearch(@Valid @ModelAttribute("search") SearchModel search, BindingResult result)
+	@RequestMapping(path="/go", method=RequestMethod.POST)
+	public ModelAndView find(@RequestParam("search") String search)
 	{
-		// check if the model has data validation errors
-		if(result.hasErrors())
-		{
-			// if it has errors:
-			// instantiating ModelAndView object and specifying to return the "secureSearchError" view
-			ModelAndView mav = new ModelAndView("secureSearchError");
-			
-			// adding a Search model (using model passed in)
-			mav.addObject("search", search);
-			
-			// returning ModelAndView object with all models needed attached
-			return mav;
-		}
+		// instantiating ModelAndView object and specifying to return the "searchResults" view
+		ModelAndView mav = new ModelAndView("searchResults");
 		
-		// if it does not have errors:
-		// instantiating ModelAndView object and specifying to return the "secureHome" view
-		ModelAndView mav = new ModelAndView("secureHome");
+		// getting all the posts that match the search
+		ArrayList<TopicModel> tml = new ArrayList<TopicModel>(topicService.getSearchTopics(search));
 		
-		// adding a Search model (using model passed in)
-		mav.addObject("search", search);
+		// if the search results are empty then add an appropriate error message, else add a "Here's Your Search Results" message
+		if(tml.isEmpty())
+			mav.addObject("message", "Sorry, but your search rendered no results.");
+		else
+			mav.addObject("message", "Search Results");
+
+		// adding SearchModel, TopicModel ArrayList of recent posts, and TopicModel ArrayList of the search results
+		mav.addObject("search", new SearchModel());
+		mav.addObject("recent", new ArrayList<TopicModel>(topicService.getMostRecentPosts()));
+		mav.addObject("results", tml);
 		
 		// returning ModelAndView object with all models needed attached
 		return mav;
-		
 	}
 }

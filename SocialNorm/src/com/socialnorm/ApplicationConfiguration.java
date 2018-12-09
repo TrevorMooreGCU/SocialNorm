@@ -1,25 +1,32 @@
 package com.socialnorm;
 
+import org.apache.tomcat.jdbc.pool.DataSource;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import com.socialnorm.controller.CreateController;
+import com.socialnorm.controller.DeleteController;
 import com.socialnorm.controller.HomeController;
 import com.socialnorm.controller.LoginController;
 import com.socialnorm.controller.RegisterController;
 import com.socialnorm.controller.SearchController;
+import com.socialnorm.controller.UpdateController;
+import com.socialnorm.controller.ViewTopicController;
+import com.socialnorm.model.ChatModel;
+import com.socialnorm.model.CommentModel;
+import com.socialnorm.model.CredentialModel;
+import com.socialnorm.model.MessageModel;
+import com.socialnorm.model.RegisterModel;
+import com.socialnorm.model.TopicModel;
 import com.socialnorm.services.business.ILoginService;
 import com.socialnorm.services.business.IRegisterService;
-import com.socialnorm.services.business.ITopicPostService;
+import com.socialnorm.services.business.ITopicService;
 import com.socialnorm.services.business.LoginService;
 import com.socialnorm.services.business.RegisterService;
-import com.socialnorm.services.business.TopicPostService;
-import com.socialnorm.services.data.DBConnection;
-import com.socialnorm.services.data.IDBConnection;
-import com.socialnorm.services.data.IRegistrationDAO;
-import com.socialnorm.services.data.ISecurityDAO;
-import com.socialnorm.services.data.ITopicDAO;
+import com.socialnorm.services.business.TopicService;
+import com.socialnorm.services.data.DataAccessInterface;
 import com.socialnorm.services.data.RegistrationDAO;
 import com.socialnorm.services.data.SecurityDAO;
 import com.socialnorm.services.data.TopicDAO;
@@ -84,6 +91,34 @@ public class ApplicationConfiguration
 	{
 		return new CreateController();
 	}
+	/**
+	 * Getter for the ViewTopicController SpringBean
+	 * @return type CreateController
+	 */
+	@Bean(name="viewTopicController")
+	public ViewTopicController getViewTopicController()
+	{
+		return new ViewTopicController();
+	}
+	/**
+	 * Getter for the UpdateController SpringBean
+	 * @return type UpdateController
+	 */
+	@Bean(name="updateController")
+	public UpdateController getUpdateController()
+	{
+		return new UpdateController();
+	}
+	/**
+	 * Getter for the DeleteController SpringBean
+	 * @return type DeleteController
+	 */
+	@Bean(name="deleteController")
+	public DeleteController getDeleteController()
+	{
+		return new DeleteController();
+	}
+	
 	
 	/// BUSINESS SERVICES ///
 	/**
@@ -91,7 +126,7 @@ public class ApplicationConfiguration
 	 * @return type ILoginService
 	 */
 	@Bean(name="loginService")
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	@Scope(value="singleton", proxyMode=ScopedProxyMode.TARGET_CLASS)
 	public ILoginService getLoginService()
 	{
 		return new LoginService();
@@ -101,7 +136,7 @@ public class ApplicationConfiguration
 	 * @return type IRegisterService
 	 */
 	@Bean(name="registerService")
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	@Scope(value="singleton", proxyMode=ScopedProxyMode.TARGET_CLASS)
 	public IRegisterService getRegisterService()
 	{
 		return new RegisterService();
@@ -110,12 +145,13 @@ public class ApplicationConfiguration
 	 * Getter for TopicPostService SpringBean (request scoped)
 	 * @return type ITopicPostService
 	 */
-	@Bean(name="topicPostService")
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
-	public ITopicPostService getTopicPostService()
+	@Bean(name="topicService")
+	@Scope(value="singleton", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	public ITopicService getTopicService()
 	{
-		return new TopicPostService();
+		return new TopicService();
 	}
+	
 	
 	/// DATA SERVICES ///
 	/**
@@ -123,8 +159,9 @@ public class ApplicationConfiguration
 	 * @return type ISecurityDAO
 	 */
 	@Bean(name="securityDAO")
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
-	public ISecurityDAO getSecurityDAO()
+	@Scope(value="singleton", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	@Qualifier("security")
+	public DataAccessInterface<RegisterModel,CredentialModel,TopicModel,CommentModel,ChatModel,MessageModel> getSecurityDAO()
 	{
 		return new SecurityDAO();
 	}
@@ -133,8 +170,9 @@ public class ApplicationConfiguration
 	 * @return type IRegistrationDAO
 	 */
 	@Bean(name="registrationDAO")
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
-	public IRegistrationDAO getRegistrationDAO()
+	@Scope(value="singleton", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	@Qualifier("register")
+	public DataAccessInterface<RegisterModel,CredentialModel,TopicModel,CommentModel,ChatModel,MessageModel> getRegistrationDAO()
 	{
 		return new RegistrationDAO();
 	}
@@ -143,20 +181,41 @@ public class ApplicationConfiguration
 	 * @return type ITopicDAO
 	 */
 	@Bean(name="topicDAO")
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
-	public ITopicDAO getTopicDAO()
+	@Scope(value="singleton", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	@Qualifier("topic")
+	public DataAccessInterface<RegisterModel,CredentialModel,TopicModel,CommentModel,ChatModel,MessageModel> getTopicDAO()
 	{
 		return new TopicDAO();
 	}
+	
+	
+	/// DATA SOURCE ///
 	/**
-	 * Getter for DBConnection SpringBean (request scoped)
-	 * @return type IDBConnection
+	 * Getter for DataSource SpringBean (singleton scoped)
+	 * @return type DataSource
 	 */
-	@Bean(name="dBConnection")
-	@Scope(value="request", proxyMode=ScopedProxyMode.TARGET_CLASS)
-	public IDBConnection getDBConnection()
+	@Bean(name="dataSource", destroyMethod = "close")
+	@Scope(value="singleton", proxyMode=ScopedProxyMode.TARGET_CLASS)
+	public DataSource getDataSource()
 	{
-		return new DBConnection();
+		// Local/Derby:
+		// org.apache.derby.jdbc.EmbeddedDriver
+		// jdbc:derby:C:\\Users\\Trevor\\SocialNormDB
+		// user
+		// derby
+		
+		// Heroku/MySQL:
+		// com.mysql.jdbc.Driver
+		// jdbc:mysql://aucxibl2dxeo01wa:hytrxvvxgrfx6e02@l9dwvv6j64hlhpul.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/n1euzrfjibaye0bl
+		// aucxibl2dxeo01wa
+		// hytrxvvxgrfx6e02
+		DataSource dataSource = new DataSource();
+	    dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+	    dataSource.setUrl("jdbc:mysql://aucxibl2dxeo01wa:hytrxvvxgrfx6e02@l9dwvv6j64hlhpul.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/n1euzrfjibaye0bl");
+	    dataSource.setUsername("aucxibl2dxeo01wa");
+	    dataSource.setPassword("hytrxvvxgrfx6e02"); 
+	    dataSource.setInitialSize(2);
+	    return dataSource;
 	}
 	
 }
